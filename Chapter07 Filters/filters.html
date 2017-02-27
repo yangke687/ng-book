@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="myApp.filters">
+<head>
+<title>Filters</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>
+</head>
+<body>
+	<div>
+		<div>
+			<h2>date</h2>
+			<p>{{ today | date: 'medium' }}</p>
+			<p>{{ today | date: 'short' }}</p>
+			<p>{{ today | date: 'fullDate' }}</p>
+			<p>{{ today | date: 'longDate' }}</p>
+			<p>{{ today | date: 'mediumDate' }}</p>
+			<p>{{ today | date: 'shortDate' }}</p>
+			<p>{{ today | date: 'shortTime' }}</p>
+			<p>{{ today | date: 'mediumTime' }}</p>
+			<p>{{ today | date: 'a' }}</p>
+
+			<h2>filter</h2>
+			<p>{{ ['Ari','Lerner','Likes','To','Eat','Pizza'] | filter:'e' }}</p>
+			<p>{{
+					[{
+						'name': 'Ari',
+						'City': 'San Francisco',
+						'favorite food': 'Pizza'
+						},{
+						'name': 'Nate',
+						'City': 'San Francisco',
+						'favorite food': 'indian food'
+					}] | filter: {'favorite food':'Pizza'}
+				}}
+			</p>
+			<p>{{ ['Ari','likes','to','travel'] | filter:isCapitalized }}</p>
+
+			<h2>json</h2>
+			<p>{{ {'name':'Ari','City':'SanFrancisco'} | json }}</p>
+
+			<h2>limitTo:</h2>
+			<p>{{ "San Francisco is very cloudy" | limitTo:3  }}</p>
+			<p>{{ [1,2,3,4,5] | limitTo:1 }}</p>
+
+			<h2>lowercase</h2>
+			<p>{{ "San Francisco is very cloudy" | lowercase }}</p>
+
+			<h2>nubmer</h2>
+			<p>{{ 123456789 | number }}</p>
+
+			<h2>orderBy</h2>
+			<p>{{
+				[{
+					'name': 'Ari',
+					'status': 'awake'
+				},{
+					'name': 'Q',
+					'status': 'sleeping'
+				},{
+					'name': 'Nate',
+					'status': 'awake'
+				}] | orderBy: 'name'
+			}}</p>
+			<p>{{
+				[{
+					'name': 'Ari',
+					'status': 'awake'
+				},{
+					'name': 'Q',
+					'status': 'sleeping'
+				},{
+					'name': 'Nate',
+					'status': 'awake'
+				}] | orderBy: 'name': true
+			}}</p>
+
+			<h2>uppercase</h2>
+			<p>{{ "San Francisco is very cloudy" | uppercase }}</p>
+
+			<h2>Custom Filters</h2>
+			<p>{{ 'ginger loves dog treats' | lowercase | capitalize }}</p>
+		</div>
+	</div>
+	<script>
+		angular.module('myApp.filters',[]).run(['$rootScope',function($rootScope){
+			$rootScope.today = new Date();
+			$rootScope.isCapitalized = function(str){
+				return str[0] === str[0].toUpperCase();
+			}
+		}]);
+		angular.module('myApp.filters',[])
+			.filter('capitalize',function(){
+				return function(input){
+					if(input){
+						return input[0].toUpperCase() + input.slice(1);
+					}
+				}
+			})
+	</script>
+</body>
+</html>	

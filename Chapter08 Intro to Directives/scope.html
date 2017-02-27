@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Scope of Directive</title>
+	<script src="../angular.min.js"></script>
+</head>
+<body>
+	<div ng-controller="myController">
+		<input type="text" ng-model="myUrl">
+		<span ng-bind="myUrl"></span>
+		<br>
+		<my-directive 
+			some-attr="{{ myUrl }}"
+			click-text="click me to go to Google">
+		</my-directive> 
+		<br>
+		<div my-directive some-attr="{{ myUrl }}" click-text="click to go to Google"></div>
+	</div>
+	<script>
+		angular.module('myApp',[])
+			.controller('myController',['$scope',function($scope){
+				$scope.myUrl = 'http://www.google.com.hk';
+			}]).directive('myDirective',function(){
+				return {
+					restrict: 'EA',
+					replace: true,
+					scope: {
+						myUrl: '@someAttr',
+						clickText: '@',
+					},
+					template: '<a href="{{ myUrl }}">' + '{{clickText}}</a>',
+				};
+			});
+	</script>
+</body>
+</html>
