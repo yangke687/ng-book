@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Binding Scope Demo</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.js"></script>
+</head>
+<body>
+	<div ng-controller="someController">
+		<input type="text" ng-model="to">
+		<div scope-example
+			ng-model="to"
+			on-send="sendMail(email)"
+			from-name="yangke687@gmail.com"
+			>
+			<button ng-click="onSend(to)">Send Mail</button>			
+		</div>
+	</div>
+	<script>
+		angular.module('myApp',[])
+			.controller('someController',['$scope',function($scope){
+				$scope.sendMail = function(email){
+					console.log("send mail by controller",email);
+				}
+			}])
+			.directive('scopeExample',function(){
+				return {
+					restrict: 'AE',
+					scope: {
+						ngModel: '=',
+						onSend: '&',
+						fromName: '@'
+					}
+				};
+			});
+	</script>
+</body>
+</html>

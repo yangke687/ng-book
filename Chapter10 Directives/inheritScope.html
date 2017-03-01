@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Inherit Scope Directive</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.js"></script>
+</head>
+<body>
+	<div ng-init="myProperty = 'wow, this is cool!'"></div>
+	<div my-inherit-directive>
+		<h2>Inside Directive :</h2>Inherit Scope -> {{ myProperty }}
+	</div>
+	<div my-directive>
+		<h2>Inside Diretive :</h2>Isolated Scope -> {{ myProperty }}
+	</div>
+	<script>
+		angular.module('myApp',[])
+			.directive('nyInheritDirective',function(){
+				return {
+					restrict: 'A',
+					scope: true, // 从外部继承作用域的指令
+				};
+			})
+			.directive('myDirective',function(){
+				return {
+					restrict: 'A',
+					scope: {}	// 隔离作用域指令
+				};
+			});
+	</script>
+</body>
+</html>

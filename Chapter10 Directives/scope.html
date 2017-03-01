@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Directive Scope</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div ng-app="myApp" ng-init="someProperty = 'some data'">
+			<div ng-init="siblingProperty='moredata'">Inside Div Two: {{ aThirdProperty }}
+				<div ng-init="aThirdProperty = 'data for 3rd property'" ng-controller="SomeController">
+					Inside Div Three: {{ aThirdProperty }}
+					<div ng-init="aFourthProperty">
+						Inside Div Four: {{ aThirdProperty }}
+						<div ng-controller="SecondController">
+							Outside myDirective: {{ myProperty }}
+							<div my-directive ng-init="myProperty = 'wow,this is cool'">
+								Inside myDirective: {{ myProperty }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		angular.module('myApp',[])
+			.controller('SomeController',['$scope',function($scope){
+
+			}])
+			.controller('SecondController',['$scope',function($scope){
+
+			}])
+			.directive('myDirective',function(){
+				return {
+					restrict: 'AE',
+					scope: {}
+				};
+			});
+	</script>
+</body>
+</html>
+
