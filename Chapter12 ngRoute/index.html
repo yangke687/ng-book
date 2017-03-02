@@ -36,10 +36,12 @@
 								$http.get('/api/data.json')
 									.then(function(res){
 										def.resolve(res.data);
+										console.log('def promise 1', def.promise);
 									},function(err){
 										def.reject(err);
 									});
-								return def.promise;
+								console.log('def promise 2', def.promise);
+								return def.promise; // 这里返回的 promise 对象可以被自动 resolve成一个值
 							}]
 						},
 						controller: 'DashboardController',
@@ -71,6 +73,7 @@
 				$scope.username = $routeParams.name;
 			}])
 			.controller('DashboardController',['$scope','data',function($scope,data){
+				console.log('data', data);
 				$scope.person = data.person;
 			}]);
 	</script>
