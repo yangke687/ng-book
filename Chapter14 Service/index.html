@@ -21,10 +21,23 @@
 	</div>
 	<script>
 		angular.module('myApp',['myApp.services'])
-			.controller('serviceController',['$scope','githubService',function($scope,githubService){
-				$scope.username = 'yangke687';
+			.controller('serviceController',['$scope','githubService','$timeout',function($scope,githubService,$timeout){
+				//$scope.username = 'yangke687';
+				// $scope.$watch('username',function(newUserName,oldUserName){
+				// 	if(newUserName && newUserName!==oldUserName){
+				// 		if(timeout) $timeout.cancel(timeout);
+				// 		var timeout = $timeout(function(){
+				// 			githubService.events(newUserName).success(function(data,status){
+				// 				console.log('timeout event');
+				// 				$scope.events = data.data;
+				// 			});
+				// 		},350);
+				// 	}
+				// });
+				$scope.setUserName = githubService.setUserName;
+				$scope.setUserName("yangke687");
 				return githubService
-					.events($scope.username)
+					.events()
 					.then(function(res){
 						$scope.events = res.data.data;
 					});
@@ -32,20 +45,43 @@
 
 		angular.module('myApp.services',[])
 			.factory('githubService',['$http',function($http){
-				var githubUrl = 'http://api.github.com';
-				var runUserRequest = function(username,path){
+				var githubUrl = 'http://api.github.com'
+					,githubUserName
+				var runUserRequest = function(path){
 					return $http({
 						method: 'JSONP',
 						url: githubUrl + '/users/'
-							+ username + '/'
+							+ githubUserName + '/'
 							+ path + '?callback=JSON_CALLBACK',
 					})
 				}
 				return {
-					events: function(username){
-						return runUserRequest(username,'events');
+					events: function(){
+						return runUserRequest('events');
+					},
+					setUserName: function(username){
+						githubUserName = username;
 					}
 				}
+			}]);
+
+		// 添加一个装饰器
+		angular.module('myApp')
+			.config(['$provide',function($provide){
+				$provide.decorator('githubService',['$delegate','$log',function($delegate,$log){
+					var events = function(){
+						var startedAt = new Date();
+						var events = $delegate.events()
+						events.finally(function(){
+							console.log("fetching data at:" + startedAt);
+						});
+						return events;
+					}
+					return {
+						events: events,
+						setUserName: $delegate.setUserName
+					}
+				}]);
 			}]);
 	</script>
 </body>
