@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>ngResource Demo</title>
+	<script src="https://code.angularjs.org/1.6.2/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.6.2/angular-resource.min.js"></script>
+</head>
+<body>
+	<div ng-controller="someController"></div>
+	<script>
+		angular.module('myApp',['ngResource'])
+			.controller('someController',['$resource','$scope',function($resource,$scope){
+				var User = $resource(
+					'/api/users/:id.json',
+					{
+						id: '@id',
+					},{
+						sendEmail: {
+							method: 'GET',
+							params: {'h':'q'}
+						}
+					});
+
+				User.get({
+					id: '123'
+				},function(user){
+					console.log(user);
+					user.$sendEmail();
+				},function(err){
+
+				});
+			}]);
+	</script>
+</body>
+</html>
